@@ -5,16 +5,10 @@
 import sqlite3
 
 
-def start():
-    filelist = ['information.docx', 'Hello.txt', 'myImage.png', \
-                'myMovie.mpg', 'World.txt', 'data.pdf', 'myPhoto.jpg']
 
-    text_files = []
+filelist = ['information.docx', 'Hello.txt', 'myImage.png', \
+            'myMovie.mpg', 'World.txt', 'data.pdf', 'myPhoto.jpg']
 
-    for match in filelist:
-        if "txt" in match:
-            text_files.append(match)
-    return(text_files)
 
          
 connect = sqlite3.connect('db.assignment')
@@ -25,8 +19,10 @@ with connect:
                     ID INTEGER PRIMARY KEY AUTOINCREMENT, \
                     Tfiles TEXT)")
     connect.commit()
-    cursor.execute("INSERT  INTO txtFiles(Tfiles) \
-                    VALUES ('Hello.txt'), ('World.txt')")
+    for txt in filelist:
+        if txt.endswith(".txt"):
+            cursor.execute("INSERT INTO txtFiles(Tfiles) VALUES (?)", \
+                           (txt,))
     connect.commit
     cursor.execute("SELECT * FROM txtFiles")
     print(cursor.fetchall())
